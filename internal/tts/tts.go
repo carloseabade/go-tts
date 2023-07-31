@@ -176,7 +176,7 @@ func (s *Speech) gen(broker storage.IWriteBroker) error {
 
 func generateHashName(name, voice string) string {
 	hash := sha256.Sum256([]byte(name))
-	return fmt.Sprintf("%s_%s", voice, hex.EncodeToString(hash[:]))
+	return fmt.Sprintf("%s_%s", voice, hex.EncodeToString(hash[:12]))
 }
 
 type OssSpeechFactory struct {
