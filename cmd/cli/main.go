@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/carloseabade/go-tts/internal/flags"
+	"github.com/carloseabade/go-tts/internal/go_tts"
 	"github.com/carloseabade/go-tts/pkg/tts"
 )
 
@@ -15,9 +16,9 @@ func main() {
 		flags.Usage()
 	case flags.Text != "" || flags.File != "" || flags.ListVoices:
 		if flags.Text != "" {
-			tts.TTS(tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
+			go_tts.TTS(go_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
 		} else if flags.File != "" {
-			tts.TTS(tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
+			go_tts.TTS(go_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
 		} else {
 			tts.PrintVoices(flags.Proxy)
 		}
