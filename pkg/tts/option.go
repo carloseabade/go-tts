@@ -1,5 +1,11 @@
 package tts
 
+const (
+	trustedClientToken = "6A5AA1D4EAFF4E9FB37E23D68491D6F4"
+	WssURL             = "wss://speech.platform.bing.com/consumer/speech/synthesize/" + "readaloud/edge/v1?TrustedClientToken=" + trustedClientToken
+	VoiceList          = "https://speech.platform.bing.com/consumer/speech/synthesize/" + "readaloud/voices/list?trustedclienttoken=" + trustedClientToken
+)
+
 type Option struct {
 	OptID optionID
 	Param string
