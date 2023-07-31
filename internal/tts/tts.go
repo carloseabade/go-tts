@@ -1,4 +1,4 @@
-package go_tts
+package tts
 
 import (
 	"crypto/sha256"

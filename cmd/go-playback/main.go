@@ -1,12 +1,12 @@
 package main
 
 import (
-  "fmt"
-  "os"
-  "os/exec"
+	"fmt"
+	"os"
+	"os/exec"
 
 	"github.com/carloseabade/go-tts/internal/flags"
-	"github.com/carloseabade/go-tts/internal/go_tts"
+	_tts "github.com/carloseabade/go-tts/internal/tts"
 	"github.com/carloseabade/go-tts/pkg/tts"
 )
 
@@ -20,11 +20,11 @@ func main() {
 		flags.Usage()
 	case flags.Text != "" || flags.File != "" || flags.ListVoices:
 		if flags.Text != "" {
-			go_tts.TTS(go_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
-      runMPV()
+			_tts.TTS(_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
+			runMPV()
 		} else if flags.File != "" {
-			go_tts.TTS(go_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
-      runMPV()
+			_tts.TTS(_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
+			runMPV()
 		} else {
 			tts.PrintVoices(flags.Proxy)
 		}
@@ -34,10 +34,10 @@ func main() {
 }
 
 func runMPV() {
-  cmd := exec.Command("mpv", flags.WriteMedia)
-  cmd.Stdout = os.Stdout
+	cmd := exec.Command("mpv", flags.WriteMedia)
+	cmd.Stdout = os.Stdout
 
-  if err := cmd.Run(); err != nil {
-    fmt.Println("could not run command: ", err)
-  }
+	if err := cmd.Run(); err != nil {
+		fmt.Println("could not run command: ", err)
+	}
 }
