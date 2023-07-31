@@ -21,10 +21,10 @@ func main() {
 	case flags.Text != "" || flags.File != "" || flags.ListVoices:
 		if flags.Text != "" {
 			_tts.TTS(_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
-			runMPV()
+			runMPV(_tts.MySpeech.FileName)
 		} else if flags.File != "" {
 			_tts.TTS(_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
-			runMPV()
+			runMPV(_tts.MySpeech.FileName)
 		} else {
 			tts.PrintVoices(flags.Proxy)
 		}
@@ -33,8 +33,8 @@ func main() {
 	}
 }
 
-func runMPV() {
-	cmd := exec.Command("mpv", flags.WriteMedia)
+func runMPV(filename string) {
+	cmd := exec.Command("mpv", filename)
 	cmd.Stdout = os.Stdout
 
 	if err := cmd.Run(); err != nil {

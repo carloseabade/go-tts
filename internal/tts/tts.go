@@ -221,14 +221,16 @@ func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string) {
 	}
 }
 
+var MySpeech *LocalSpeech
+
 func TTSText(text, writeMedia string, opts ...tts.Option) {
 	c, err := tts.NewCommunicate(text, opts...)
 	handleError(err)
 
-	speech, err := NewLocalSpeech(c, "", writeMedia)
+	MySpeech, err = NewLocalSpeech(c, "", writeMedia)
 	handleError(err)
 
-	err = speech.GenTTS()
+	err = MySpeech.GenTTS()
 }
 
 func TTSFile(file, writeMedia string, opts ...tts.Option) {
