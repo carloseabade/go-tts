@@ -1,4 +1,4 @@
-package edge
+package tts
 
 type Option struct {
 	OptID optionID

@@ -1,20 +1,32 @@
-package edge
+package tts
 
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html"
+	"io/ioutil"
 	"net/http"
+	"net/url"
+	"os"
 	"regexp"
 	"runtime/debug"
+	"sort"
 	"strings"
 	"time"
 
+	"crypto/sha256"
+	"encoding/hex"
+
 	"github.com/bytedance/sonic"
+	"github.com/carloseabade/go-tts/internal/config"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+
+	file_helper "github.com/pp-group/file-helper"
+	storage "github.com/pp-group/file-helper/storage"
 )
 
 type Communicate struct {
@@ -58,8 +70,8 @@ func NewCommunicate(text string, opts ...Option) (*Communicate, error) {
 	proxy := GetProxyByOption(opts)
 	// Default values
 	if voice == "" {
-		voice = defaultVoice
-		voiceLangRegion = defaultVoice
+		voice = config.DefaultVoice
+		voiceLangRegion = config.DefaultVoice
 	}
 	if rate == "" {
 		rate = "+0%"
@@ -133,7 +145,7 @@ func (c *Communicate) Stream() (<-chan map[string]interface{}, error) {
 
 	for idx, text := range texts {
 		fmt.Printf("text=%s\n", text)
-		wsURL := WssURL + "&ConnectionId=" + connectID()
+		wsURL := config.WssURL + "&ConnectionId=" + connectID()
 		dialer := websocket.Dialer{}
 		conn, _, err := dialer.Dial(wsURL, c.makeHeaders())
 		if err != nil {
@@ -468,4 +480,348 @@ func dictReplace(data string, entities map[string]string) string {
 		data = strings.ReplaceAll(data, key, value)
 	}
 	return data
+}
+
+func listVoices(proxy string) []voice {
+	if proxy != "" {
+		proxyUrl, err := url.Parse(proxy)
+		if err != nil {
+			fmt.Println(err)
+		}
+		http.DefaultTransport = &http.Transport{Proxy: http.ProxyURL(proxyUrl)}
+	}
+
+	req, err := http.NewRequest("GET", config.VoiceList, nil)
+	req.Header.Add("If-None-Match", `W/"wyzzy"`)
+	req.Header.Add("Authority", "speech.platform.bing.com")
+	req.Header.Add("Sec-CH-UA", "\" Not;A Brand\";v=\"99\", \"Microsoft Edge\";v=\"91\", \"Chromium\";v=\"91\"")
+	req.Header.Add("Sec-CH-UA-Mobile", "?0")
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36 Edg/91.0.864.41")
+	req.Header.Add("Accept", "*/*")
+	req.Header.Add("Sec-Fetch-Site", "none")
+	req.Header.Add("Sec-Fetch-Mode", "cors")
+	req.Header.Add("Sec-Fetch-Dest", "empty")
+	req.Header.Add("Accept-Encoding", "gzip, deflate, br")
+	req.Header.Add("Accept-Language", "en-US,en;q=0.9")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+
+	var voiceList []voice
+	json.Unmarshal(body, &voiceList)
+
+	return voiceList
+}
+
+func PrintVoices(proxy string) {
+	voices := listVoices(proxy)
+
+	by(func(v1, v2 *voice) bool {
+		return v1.ShortName < v2.ShortName
+	}).sort(voices)
+
+	for i, voice := range voices {
+		if i != 0 {
+			fmt.Println()
+		}
+		fmt.Printf("Name: %s\nShortName: %s\nGender: %s\nLocale: %s\n", voice.Name, voice.ShortName, voice.Gender, voice.Locale)
+	}
+}
+
+type voice struct {
+	Name           string
+	ShortName      string
+	Gender         string
+	Locale         string
+	SuggestedCoded string
+	FriendlyName   string
+	Status         string
+	VoiceTag       voiceTag
+}
+
+type voiceTag struct {
+	ContentCategories  []string
+	VoicePersonalities []string
+}
+
+type by func(v1, v2 *voice) bool
+
+func (by by) sort(voices []voice) {
+	vs := &voiceSorter{
+		voices: voices,
+		by:     by,
+	}
+	sort.Sort(vs)
+}
+
+type voiceSorter struct {
+	voices []voice
+	by     func(v1, v2 *voice) bool
+}
+
+func (vs *voiceSorter) Len() int {
+	return len(vs.voices)
+}
+
+func (vs *voiceSorter) Swap(i, j int) {
+	vs.voices[i], vs.voices[j] = vs.voices[j], vs.voices[i]
+}
+
+func (vs *voiceSorter) Less(i, j int) bool {
+	return vs.by(&vs.voices[i], &vs.voices[j])
+}
+
+//=================================
+/*
+import (
+	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
+
+	file_helper "github.com/pp-group/file-helper"
+	storage "github.com/pp-group/file-helper/storage"
+)
+*/
+
+type ISpeech interface {
+	GenTTS() error
+	URL(filename string) (string, error)
+}
+
+var _ ISpeech = new(LocalSpeech)
+
+type LocalSpeech struct {
+	*Speech
+}
+
+func NewLocalSpeech(c *Communicate, folder, filename string) (*LocalSpeech, error) {
+
+	fileStorage, err := file_helper.FileStorageFactory(folder)()
+	if err != nil {
+		return nil, err
+	}
+
+	s, err := NewSpeech(c, fileStorage, folder, filename)
+	if err != nil {
+		return nil, err
+	}
+
+	return &LocalSpeech{
+		Speech: s,
+	}, nil
+
+}
+
+func (speech *LocalSpeech) GenTTS() error {
+	return gentts(speech.Speech, func() (storage.IWriteBroker, error) {
+		return speech.Writer(speech.FileName, nil)
+	})
+}
+
+func (speech *LocalSpeech) URL(filename string) (string, error) {
+	return urlTTS(func() (storage.IReadBroker, error) {
+		return speech.Reader(filename, nil)
+	})
+}
+
+var _ ISpeech = new(OssSpeech)
+
+type OssSpeech struct {
+	*Speech
+	bucket string
+}
+
+func NewOssSpeech(c *Communicate, endpoint, ak, sk, folder, bucket string) (*OssSpeech, error) {
+
+	ossStorage, err := file_helper.OssStorageFactory(endpoint, ak, sk, folder)()
+	if err != nil {
+		return nil, err
+	}
+
+	s, err := NewSpeech(c, ossStorage, folder, "")
+	if err != nil {
+		return nil, err
+	}
+
+	return &OssSpeech{
+		Speech: s,
+		bucket: bucket,
+	}, nil
+}
+
+func (speech *OssSpeech) GenTTS() error {
+
+	return gentts(speech.Speech, func() (storage.IWriteBroker, error) {
+		return speech.Writer(speech.FileName, func() interface{} {
+			return speech.bucket
+		})
+	})
+}
+
+func (speech *OssSpeech) URL(filename string) (string, error) {
+	return urlTTS(func() (storage.IReadBroker, error) {
+		return speech.Reader(filename, func() interface{} {
+			return speech.bucket
+		})
+	})
+}
+func gentts(speech *Speech, brokerFunc func() (storage.IWriteBroker, error)) error {
+
+	if speech.FileName == "" {
+		speech.FileName = generateHashName(speech.Text, speech.VoiceLangRegion) + ".mp3"
+	}
+
+	broker, err := brokerFunc()
+	if err != nil {
+		return err
+	}
+
+	err = speech.gen(broker)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func urlTTS(brokerFunc func() (storage.IReadBroker, error)) (string, error) {
+
+	broker, err := brokerFunc()
+	if err != nil {
+		return "", err
+	}
+	return broker.URL()
+}
+
+type Speech struct {
+	*Communicate
+	storage.IStorage
+	Folder   string
+	FileName string
+}
+
+func NewSpeech(c *Communicate, storage storage.IStorage, folder, filename string) (*Speech, error) {
+	s := &Speech{
+		Communicate: c,
+		IStorage:    storage,
+		Folder:      folder,
+		FileName:    filename,
+	}
+	return s, nil
+
+}
+
+func (s *Speech) gen(broker storage.IWriteBroker) error {
+	op, err := s.Stream()
+	if err != nil {
+		return err
+	}
+	defer s.CloseOutput()
+	solveCount := 0
+	audioData := make([][][]byte, s.AudioDataIndex)
+	for i := range op {
+		if _, ok := i["end"]; ok {
+			solveCount++
+			if solveCount == s.AudioDataIndex {
+				break
+			}
+		}
+		t, ok := i["type"]
+		if ok && t == "audio" {
+			data := i["data"].(AudioData)
+			audioData[data.Index] = append(audioData[data.Index], data.Data)
+		}
+		e, ok := i["error"]
+		if ok {
+			fmt.Printf("has error err: %v\n", e)
+		}
+	}
+	// write data, sort by index
+	for _, v := range audioData {
+		for _, data := range v {
+			broker.Write(data)
+		}
+	}
+	broker.Close()
+	return nil
+}
+
+func generateHashName(name, voice string) string {
+	hash := sha256.Sum256([]byte(name))
+	return fmt.Sprintf("%s_%s", voice, hex.EncodeToString(hash[:]))
+}
+
+type OssSpeechFactory struct {
+	endpoint string
+	ak       string
+	sk       string
+	bucket   string
+	folder   string
+}
+
+func NewOssSpeechFactory(endpoint, ak, sk, bucket, folder string) *OssSpeechFactory {
+	return &OssSpeechFactory{
+		endpoint: endpoint,
+		ak:       ak,
+		sk:       sk,
+		bucket:   bucket,
+		folder:   folder,
+	}
+}
+
+func (factory *OssSpeechFactory) OssSpeech(c *Communicate, folder string) (*OssSpeech, error) {
+	if folder != "" {
+		return NewOssSpeech(c, factory.endpoint, factory.ak, factory.sk, folder, factory.bucket)
+	}
+	return NewOssSpeech(c, factory.endpoint, factory.ak, factory.sk, factory.folder, factory.bucket)
+}
+
+//=================================
+
+type TTSMode int
+
+const (
+	TEXT TTSMode = 0
+	FILE TTSMode = 1
+)
+
+func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string) {
+	if f == TEXT {
+		TTSText(input, writeMedia, WithVoice(voice), WithRate(rate), WithVolume(volume), WithProxy(proxy))
+	} else if f == FILE {
+		TTSFile(input, writeMedia, WithVoice(voice), WithRate(rate), WithVolume(volume), WithProxy(proxy))
+	} else {
+		handleError(fmt.Errorf("TTS function internal error"))
+	}
+}
+
+func TTSText(text, writeMedia string, opts ...Option) {
+	c, err := NewCommunicate(text, opts...)
+	handleError(err)
+
+	speech, err := NewLocalSpeech(c, "", writeMedia)
+	handleError(err)
+
+	err = speech.GenTTS()
+}
+
+func TTSFile(file, writeMedia string, opts ...Option) {
+	dat, err := os.ReadFile(file)
+	handleError(err)
+
+	TTSText(string(dat), writeMedia, opts...)
+}
+
+func handleError(err error) {
+	if err != nil {
+		fmt.Printf("%s: %s\n", config.SoftwareName, err)
+		os.Exit(1)
+	}
 }
