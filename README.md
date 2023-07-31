@@ -1,4 +1,4 @@
-# github.com/pp-group/edge-tts-go
+# github.com/carloseabade/go-tts
 this is a project rewrite edge-tts with go
 
 language and voice support: https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support?tabs=tts
@@ -7,4 +7,4 @@ language and voice support: https://learn.microsoft.com/en-us/azure/cognitive-se
 speech_test.go TestGenTTS()
 
 ## LICENSE: MIT
-pp-group/github.com/pp-group/edge-tts-go is licensed under the **MIT License**
+github.com/carloseabade/go-tts is licensed under the **MIT License**
