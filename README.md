@@ -11,7 +11,16 @@ To use the `go-tts`, run the following:
 ```bash
 $ go-tts -text "Hello, world!" -write-media hello.mp3
 ```
-**NOTE**: You can always use `-help` to learn all options :)
+
+If you wish to play it back immediately, use the `go-playback` command:
+
+```bash
+$ go-playback -text "Hello, world!"
+```
+
+Note the above requires the installation of the `mpv` command line player.
+
+**NOTE**: All go-tts commands work in go-playback as well.
 
 ### Changing the voice
 
