@@ -2,6 +2,15 @@
 
 `go-tts` is a go module that allows you to use Microsoft Edge's online text-to-speech service. It is inspired on [edge-tts](https://github.com/rany2/edge-tts) and forked from [edge-tts-go](https://github.com/rany2/edge-tts).
 
+## Installation
+
+You can download and install the packages running:
+
+```bash
+$ go install github.com/carloseabade/go-tts/cmd/go-tts@latest
+$ go install github.com/carloseabade/go-tts/cmd/go-playback@latest
+```
+
 ## Usage
 
 ### Basic usage
