@@ -211,7 +211,7 @@ const (
 	FILE TTSMode = 1
 )
 
-func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string, callback func(string)) {
+func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string) {
 	if f == TEXT {
 		TTSText(input, writeMedia, tts.WithVoice(voice), tts.WithRate(rate), tts.WithVolume(volume), tts.WithProxy(proxy))
 	} else if f == FILE {
@@ -219,12 +219,17 @@ func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string, callba
 	} else {
 		handleError(fmt.Errorf("TTS function internal error"))
 	}
+}
+
+func TTSPlayback(f TTSMode, input, writeMedia, voice, rate, volume, proxy string, callback func(string)) {
 	if callback != nil {
-		callback(MySpeech.FileName)
-		if writeMedia == "" {
-			cleanTempFiles()
-		}
+		defer callback(MySpeech.FileName)
 	}
+	if writeMedia == "" {
+		defer cleanTempFiles()
+	}
+
+	TTS(f, input, writeMedia, voice, rate, volume, proxy)
 }
 
 func cleanTempFiles() {
