@@ -15,13 +15,23 @@ $ go install github.com/carloseabade/go-tts/cmd/go-playback@latest
 
 ### Basic usage
 
-To use `go-tts`, execute the following:
+To use `go-tts`, execute the following command:
 
 ```bash
 $ go-tts -text "Hello, world!" -write-media hello.mp3
 ```
 
-**NOTE**: You can always use `-help` to learn all the available options :)
+**Note**: You can always use `-help` to learn about all the available options.
+
+If you wish to play it back immediately, you can use the `go-playback` command:
+
+```bash
+$ go-playback -text "Hello, world!"
+```
+
+All `go-tts` commands are compatible with `go-playback` as well.
+
+**Note**: Keep in mind that `go-playback` is intended for playback only. If you want to save a file, you need to explicitly use `-write-media`, otherwise, it will only play the speech and remove the temporary downloaded files. This is different from `go-tts`, which will always download a file.
 
 ### Changing the voice
 
