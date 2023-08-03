@@ -221,6 +221,16 @@ func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string, callba
 	}
 	if callback != nil {
 		callback(MySpeech.FileName)
+		if writeMedia == "" {
+			cleanTempFiles()
+		}
+	}
+}
+
+func cleanTempFiles() {
+	e := os.Remove(MySpeech.FileName)
+	if e != nil {
+		handleError(e)
 	}
 }
 
