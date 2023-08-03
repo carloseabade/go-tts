@@ -18,16 +18,12 @@ func main() {
 		flags.NotACommand()
 	case flags.Help:
 		flags.Usage()
-	case flags.Text != "" || flags.File != "" || flags.ListVoices:
-		if flags.Text != "" {
-			_tts.TTS(_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
-			runMPV(_tts.MySpeech.FileName)
-		} else if flags.File != "" {
-			_tts.TTS(_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
-			runMPV(_tts.MySpeech.FileName)
-		} else {
-			tts.PrintVoices(flags.Proxy)
-		}
+	case flags.Text != "":
+		_tts.TTS(_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy, runMPV)
+	case flags.File != "":
+		_tts.TTS(_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy, runMPV)
+	case flags.ListVoices:
+		tts.PrintVoices(flags.Proxy)
 	default:
 		flags.NoExecutableCommand()
 	}

@@ -211,13 +211,16 @@ const (
 	FILE TTSMode = 1
 )
 
-func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string) {
+func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string, callback func(string)) {
 	if f == TEXT {
 		TTSText(input, writeMedia, tts.WithVoice(voice), tts.WithRate(rate), tts.WithVolume(volume), tts.WithProxy(proxy))
 	} else if f == FILE {
 		TTSFile(input, writeMedia, tts.WithVoice(voice), tts.WithRate(rate), tts.WithVolume(volume), tts.WithProxy(proxy))
 	} else {
 		handleError(fmt.Errorf("TTS function internal error"))
+	}
+	if callback != nil {
+		callback(MySpeech.FileName)
 	}
 }
 
