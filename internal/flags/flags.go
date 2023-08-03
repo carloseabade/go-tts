@@ -35,9 +35,9 @@ func init() {
 	flag.BoolVar(&ListVoices, "l", false, "lists available voices and exits")
 	flag.StringVar(&Rate, "rate", "+0%", "set tts `RATE`")
 	flag.StringVar(&Volume, "volume", "+0%", "set tts `VOLUME`")
-	flag.StringVar(&WordsInCue, "words-in-cue", "10", "number of `WORDS` in a subtitle cue")
+	// flag.StringVar(&WordsInCue, "words-in-cue", "10", "number of `WORDS` in a subtitle cue")
 	flag.StringVar(&WriteMedia, "write-media", "", "send media output to `FILE` instead of stdout")
-	flag.StringVar(&WriteSubtitles, "write-subtitles", "", "send subtitle output to provided `FILE` instead of stderr")
+	// flag.StringVar(&WriteSubtitles, "write-subtitles", "", "send subtitle output to provided `FILE` instead of stderr")
 	flag.StringVar(&Proxy, "proxy", "", "use a `PROXY` for tts and voice list")
 }
 
