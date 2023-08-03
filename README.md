@@ -1,6 +1,6 @@
 # go-tts
 
-`go-tts` is a go module that allows you to use Microsoft Edge's online text-to-speech service. It is inspired on [edge-tts](https://github.com/rany2/edge-tts) and forked from [edge-tts-go](https://github.com/rany2/edge-tts).
+`go-tts` is a Go module that enables you to utilize Microsoft Edge's online text-to-speech service. It is inspired by [edge-tts](https://github.com/rany2/edge-tts) and forked from [edge-tts-go](https://github.com/rany2/edge-tts).
 
 ## Installation
 
@@ -15,25 +15,17 @@ $ go install github.com/carloseabade/go-tts/cmd/go-playback@latest
 
 ### Basic usage
 
-To use the `go-tts`, run the following:
+To use `go-tts`, execute the following:
 
 ```bash
 $ go-tts -text "Hello, world!" -write-media hello.mp3
 ```
 
-If you wish to play it back immediately, use the `go-playback` command:
-
-```bash
-$ go-playback -text "Hello, world!"
-```
-
-Note the above requires the installation of the `mpv` command line player.
-
-**NOTE**: All go-tts commands work in go-playback as well.
+**NOTE**: You can always use `-help` to learn all the available options :)
 
 ### Changing the voice
 
-If you want to change the voice language, run the following: 
+If you wish to change the voice language, follow these steps:
 
 You can check the available voices with the `-list-voices` option:
 
@@ -65,7 +57,7 @@ $ go-tts -voice pt-BR-AntonioNeural -text "Olá, mundo!" -write-media hello_in_p
 
 ### Changing rate and volume
 
-It is possible to make minor changes to the generated speech.
+You can make minor adjustments to the generated speech.
 
 ```bash
 $ go-tts -rate -50% -text "Hello, world!" -write-media hello_with_rate_halved.mp3
