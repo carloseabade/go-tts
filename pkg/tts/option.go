@@ -18,6 +18,7 @@ const (
 	optionIDRate   optionID = 2
 	optionIDVolume optionID = 3
 	optionIDProxy  optionID = 4
+	optionIDFast   optionID = 5
 )
 
 // WithVoice get voice config here: https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/language-support?tabs=tts
@@ -79,6 +80,22 @@ func WithProxy(proxy string) Option {
 func GetProxyByOption(opts []Option) string {
 	for _, opt := range opts {
 		if opt.OptID == optionIDProxy {
+			return opt.Param
+		}
+	}
+	return ""
+}
+
+func WithFast(fast string) Option {
+	return Option{
+		OptID: optionIDFast,
+		Param: fast,
+	}
+}
+
+func GetFastByOption(opts []Option) string {
+	for _, opt := range opts {
+		if opt.OptID == optionIDFast {
 			return opt.Param
 		}
 	}
