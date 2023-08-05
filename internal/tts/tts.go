@@ -221,7 +221,7 @@ func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string) {
 	}
 }
 
-func TTSPlayback(f TTSMode, input, writeMedia, voice, rate, volume, proxy string, callback func(string)) {
+func TTSPlayback(f TTSMode, input, writeMedia, voice, rate, volume, proxy, fast string, callback func(string)) {
 	TTS(f, input, writeMedia, voice, rate, volume, proxy)
 
 	if callback != nil {
