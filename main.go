@@ -27,13 +27,17 @@ func main() {
 
 	s := make([]string, 1)
 	lastCut := 0
+  lastIndex := 0
 	for i, v := range string(dat) {
-    for k := range c {
-      if v == c[k] {
-        s = appendToS(s, string(dat)[lastCut:i+1], &i, &lastCut)
-        break;
+    if v == ' ' {
+      for k := range c {
+        if rune(string(dat)[lastIndex]) == c[k] {
+          s = appendToS(s, string(dat)[lastCut:i+1], &i, &lastCut)
+          break;
+        }
       }
     }
+    lastIndex = i
 	}
 
   for i := range s {
