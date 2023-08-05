@@ -31,7 +31,6 @@ func main() {
 
 func runMPV(filename string) {
 	cmd := exec.Command("mpv", filename)
-	cmd.Stdout = os.Stdout
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println("could not run command: ", err)
