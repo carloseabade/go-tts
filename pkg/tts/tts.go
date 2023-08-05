@@ -125,7 +125,6 @@ func (c *Communicate) Stream() (<-chan map[string]interface{}, error) {
 	output := make(chan map[string]interface{})
 
 	for idx, text := range texts {
-		fmt.Printf("text=%s\n", text)
 		wsURL := WssURL + "&ConnectionId=" + connectID()
 		dialer := websocket.Dialer{}
 		conn, _, err := dialer.Dial(wsURL, c.makeHeaders())
