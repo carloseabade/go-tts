@@ -37,10 +37,10 @@ func GetVoiceByOption(opts []Option) string {
 	return ""
 }
 
-func WithRate(voice string) Option {
+func WithRate(rate string) Option {
 	return Option{
 		OptID: optionIDRate,
-		Param: voice,
+		Param: rate,
 	}
 }
 
@@ -53,10 +53,10 @@ func GetRateByOption(opts []Option) string {
 	return ""
 }
 
-func WithVolume(voice string) Option {
+func WithVolume(volume string) Option {
 	return Option{
 		OptID: optionIDVolume,
-		Param: voice,
+		Param: volume,
 	}
 }
 
@@ -69,10 +69,10 @@ func GetVolumeByOption(opts []Option) string {
 	return ""
 }
 
-func WithProxy(voice string) Option {
+func WithProxy(proxy string) Option {
 	return Option{
 		OptID: optionIDProxy,
-		Param: voice,
+		Param: proxy,
 	}
 }
 
