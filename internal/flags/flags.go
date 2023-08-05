@@ -20,6 +20,7 @@ var (
 	WriteMedia     string
 	WriteSubtitles string
 	Proxy          string
+	Fast           bool
 )
 
 func init() {
@@ -39,6 +40,7 @@ func init() {
 	flag.StringVar(&WriteMedia, "write-media", "", "send media output to `FILE` instead of stdout")
 	// flag.StringVar(&WriteSubtitles, "write-subtitles", "", "send subtitle output to provided `FILE` instead of stderr")
 	flag.StringVar(&Proxy, "proxy", "", "use a `PROXY` for tts and voice list")
+	flag.BoolVar(&Fast, "fast", false, "use this flag to run go-playback faster (experimental)")
 }
 
 func Parse() {
