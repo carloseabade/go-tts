@@ -15,19 +15,13 @@ func main() {
 
 	c := map[string]rune{
 		"period":      '.',
-		"comma":       ',',
-		"brackets":    ']',
-		"parenthesis": ')',
-		"braces":      '}',
-		"colon":       ':',
-		"semicolon":   ';',
 		"exclamation": '!',
 		"question":    '?',
 	}
 
 	s := make([]string, 1)
 	lastCut := 0
-  lastIndex := 0
+	lastIndex := 0
 	for i, v := range string(dat) {
     if v == ' ' {
       for k := range c {
