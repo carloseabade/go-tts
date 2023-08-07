@@ -222,14 +222,14 @@ func TTS(f TTSMode, input, writeMedia, voice, rate, volume, proxy string) {
 }
 
 func TTSPlayback(f TTSMode, input, writeMedia, voice, rate, volume, proxy string, callback func(string)) {
+	TTS(f, input, writeMedia, voice, rate, volume, proxy)
+
 	if callback != nil {
-		defer callback(MySpeech.FileName)
+		callback(MySpeech.FileName)
 	}
 	if writeMedia == "" {
-		defer cleanTempFiles()
+		cleanTempFiles()
 	}
-
-	TTS(f, input, writeMedia, voice, rate, volume, proxy)
 }
 
 func cleanTempFiles() {
