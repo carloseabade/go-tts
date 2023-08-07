@@ -15,9 +15,9 @@ func main() {
 	case flags.Help:
 		flags.Usage()
 	case flags.Text != "":
-		_tts.TTS(_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy, nil)
+		_tts.TTS(_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
 	case flags.File != "":
-		_tts.TTS(_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy, nil)
+		_tts.TTS(_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy)
 	case flags.ListVoices:
 		tts.PrintVoices(flags.Proxy)
 	default:
