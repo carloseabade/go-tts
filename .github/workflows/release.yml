@@ -1,187 +1,29 @@
+name: goreleaser
+
 on:
-  release:
-    types: [published]
-name: Build Release
+  push:
+    branches:
+      - 'master'
+
+permissions:
+  contents: write
+
 jobs:
-  release-linux-386-go-tts:
-    name: release linux/386 go-tts
+  goreleaser:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: "386"
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
-  release-linux-amd64-go-tts:
-    name: release linux/amd64 go-tts
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: amd64
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
-  release-linux-arm-go-tts:
-    name: release linux/386 go-tts
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: "arm"
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
-  release-linux-arm64-go-tts:
-    name: release linux/amd64 go-tts
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: arm64
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
-  release-darwin-amd64-go-tts:
-    name: release darwin/amd64 go-tts
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: amd64
-        GOOS: darwin
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
-  release-windows-386-go-tts:
-    name: release windows/386 go-tts
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: "386"
-        GOOS: windows
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
-  release-windows-amd64-go-tts:
-    name: release windows/amd64 go-tts
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: amd64
-        GOOS: windows
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
-  release-linux-386-go-playback:
-    name: release linux/386 go-playback
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: "386"
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
-  release-linux-amd64-go-playback:
-    name: release linux/amd64 go-playback
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: amd64
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
-  release-linux-arm-go-playback:
-    name: release linux/386 go-playback
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: "arm"
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
-  release-linux-arm64-go-playback:
-    name: release linux/amd64 go-playback
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: arm64
-        GOOS: linux
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
-  release-darwin-amd64-go-playback:
-    name: release darwin/amd64 go-playback
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: amd64
-        GOOS: darwin
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
-  release-windows-386-go-playback:
-    name: release windows/386 go-playback
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: "386"
-        GOOS: windows
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
-  release-windows-amd64-go-playback:
-    name: release windows/amd64 go-playback
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: compile and release
-      uses: ngs/go-release.action@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GOARCH: amd64
-        GOOS: windows
-        EXTRA_FILES: "LICENSE"
-        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v4
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --clean
+          workdir: ./cmd/go-tts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
