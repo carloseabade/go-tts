@@ -4,7 +4,7 @@
 
 ## Installation
 
-You can download and install the packages running:
+You can download and install the packages by looking the [releases] (https://github.com/carloseabade/go-tts/releases) or by running:
 
 ```bash
 $ go install github.com/carloseabade/go-tts/cmd/go-tts@latest
