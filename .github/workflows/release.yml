@@ -2,8 +2,8 @@ name: 'Publish to release'
 on: release
 name: Build Release
 jobs:
-  release-linux-386:
-    name: release linux/386
+  release-linux-386-go-tts:
+    name: release linux/386 go-tts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -14,8 +14,9 @@ jobs:
         GOARCH: "386"
         GOOS: linux
         EXTRA_FILES: "LICENSE"
-  release-linux-amd64:
-    name: release linux/amd64
+        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
+  release-linux-amd64-go-tts:
+    name: release linux/amd64 go-tts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -26,8 +27,9 @@ jobs:
         GOARCH: amd64
         GOOS: linux
         EXTRA_FILES: "LICENSE"
-  release-linux-arm:
-    name: release linux/386
+        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
+  release-linux-arm-go-tts:
+    name: release linux/386 go-tts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -38,8 +40,9 @@ jobs:
         GOARCH: "arm"
         GOOS: linux
         EXTRA_FILES: "LICENSE"
-  release-linux-arm64:
-    name: release linux/amd64
+        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
+  release-linux-arm64-go-tts:
+    name: release linux/amd64 go-tts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -50,8 +53,9 @@ jobs:
         GOARCH: arm64
         GOOS: linux
         EXTRA_FILES: "LICENSE"
-  release-darwin-amd64:
-    name: release darwin/amd64
+        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
+  release-darwin-amd64-go-tts:
+    name: release darwin/amd64 go-tts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -62,8 +66,9 @@ jobs:
         GOARCH: amd64
         GOOS: darwin
         EXTRA_FILES: "LICENSE"
-  release-windows-386:
-    name: release windows/386
+        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
+  release-windows-386-go-tts:
+    name: release windows/386 go-tts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -74,8 +79,9 @@ jobs:
         GOARCH: "386"
         GOOS: windows
         EXTRA_FILES: "LICENSE"
-  release-windows-amd64:
-    name: release windows/amd64
+        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
+  release-windows-amd64-go-tts:
+    name: release windows/amd64 go-tts
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -86,3 +92,95 @@ jobs:
         GOARCH: amd64
         GOOS: windows
         EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_TTS }}
+  release-linux-386-go-playback:
+    name: release linux/386 go-playback
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: "386"
+        GOOS: linux
+        EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
+  release-linux-amd64-go-playback:
+    name: release linux/amd64 go-playback
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: amd64
+        GOOS: linux
+        EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
+  release-linux-arm-go-playback:
+    name: release linux/386 go-playback
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: "arm"
+        GOOS: linux
+        EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
+  release-linux-arm64-go-playback:
+    name: release linux/amd64 go-playback
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: arm64
+        GOOS: linux
+        EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
+  release-darwin-amd64-go-playback:
+    name: release darwin/amd64 go-playback
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: amd64
+        GOOS: darwin
+        EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
+  release-windows-386-go-playback:
+    name: release windows/386 go-playback
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: "386"
+        GOOS: windows
+        EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
+  release-windows-amd64-go-playback:
+    name: release windows/amd64 go-playback
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: compile and release
+      uses: ngs/go-release.action@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GOARCH: amd64
+        GOOS: windows
+        EXTRA_FILES: "LICENSE"
+        CMD_PATH: ${{ vars.CMD_PATH_GO_PLAYBACK }}
