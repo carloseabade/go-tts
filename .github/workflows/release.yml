@@ -9,6 +9,10 @@ permissions:
 
 jobs:
   goreleaser:
+    name: 'Publish to release'
+    strategy:
+      matrix:
+        project-path: [${{ vars.CMD_PATH_GO_TTS }}, ${{ vars.CMD_PATH_GO_PLAYBACK }}]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,7 +26,7 @@ jobs:
         with:
           distribution: goreleaser
           version: latest
-          args: release --clean
-          workdir: ./cmd/go-tts
+          args: release --clean -f $GITHUB_WORKSPACE/.goreleaser.yaml
+          workdir: ${{ matrix.project-path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
