@@ -12,7 +12,7 @@ jobs:
     name: 'Publish to release'
     strategy:
       matrix:
-        project-path: [${{ vars.CMD_PATH_GO_TTS }}, ${{ vars.CMD_PATH_GO_PLAYBACK }}]
+        project-path: ['./cmd/go-tts', './cmd/go-playback']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
