@@ -1,4 +1,4 @@
 **/templateaudio
 *.mp3
-./go-tts
-./go-playback
+go-tts
+go-playback
