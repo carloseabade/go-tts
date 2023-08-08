@@ -1,4 +1,4 @@
-project_name: go-tts
+project_name: go-playback
 builds:
   - env: [CGO_ENABLED=0]
     goos:
