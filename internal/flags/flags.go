@@ -66,6 +66,6 @@ func NotACommand() {
 }
 
 func NoExecutableCommand() {
-	fmt.Printf("%s: error: one of the arguments -t/-text -f/-file -l/-list-voices is required.\n\n", config.SoftwareName)
+	fmt.Printf("%s: error: one of the arguments -t/-text, -f/-file, -l/-list-voices is required.\n\n", config.SoftwareName)
 	Usage()
 }
