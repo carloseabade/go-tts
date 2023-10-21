@@ -47,12 +47,12 @@ func Parse() {
 	flag.Parse()
 }
 
-func Args() []string {
+func args() []string {
 	return flag.Args()
 }
 
 func HasNonFlagArguments() bool {
-	return len(Args()) > 0
+	return len(args()) > 0
 }
 
 func Usage() {
@@ -61,7 +61,7 @@ func Usage() {
 }
 
 func NotACommand() {
-	fmt.Printf("%[1]s: '%[2]s' is not a %[1]s command.\n\n", config.SoftwareName, Args()[0])
+	fmt.Printf("%[1]s: '%[2]s' is not a %[1]s command.\n\n", config.SoftwareName, args()[0])
 	Usage()
 }
 
