@@ -10,7 +10,7 @@ func main() {
 	flags.Parse()
 
 	switch {
-	case len(flags.Args()) > 0:
+	case flags.HasNonFlagArguments():
 		flags.NotACommand()
 	case flags.Help:
 		flags.Usage()

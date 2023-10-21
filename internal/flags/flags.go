@@ -51,6 +51,10 @@ func Args() []string {
 	return flag.Args()
 }
 
+func HasNonFlagArguments() bool {
+	return len(Args()) > 0
+}
+
 func Usage() {
 	fmt.Printf("Usage: %[1]s [OPTIONS]\n\n", config.SoftwareName)
 	flag.PrintDefaults()
