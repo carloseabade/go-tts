@@ -8,39 +8,39 @@ import (
 )
 
 var (
-	fs             *flag.FlagSet
-	Help           bool
-	Text           string
-	File           string
-	Voice          string
-	ListVoices     bool
-	Rate           string
-	Volume         string
-	WordsInCue     string
-	WriteMedia     string
-	WriteSubtitles string
-	Proxy          string
-	Fast           bool
+	fs         *flag.FlagSet
+	help       bool
+	text       string
+	file       string
+	voice      string
+	listVoices bool
+	rate       string
+	volume     string
+	//wordsInCue     string
+	writeMedia string
+	//writeSubtitles string
+	proxy string
+	fast  bool
 )
 
 func init() {
-	flag.BoolVar(&Help, "help", false, "show this help message and exit")
-	flag.BoolVar(&Help, "h", false, "show this help message and exit")
-	flag.StringVar(&Text, "text", "", "what `TEXT` tts will say")
-	flag.StringVar(&Text, "t", "", "what `TEXT` tts will say")
-	flag.StringVar(&File, "file", "", "tts read text from `FILE`")
-	flag.StringVar(&File, "f", "", "tts read text from `FILE`")
-	flag.StringVar(&Voice, "voice", "en-US-AriaNeural", "`VOICE` for tts")
-	flag.StringVar(&Voice, "v", "en-US-AriaNeural", "`VOICE` for tts")
-	flag.BoolVar(&ListVoices, "list-voices", false, "lists available voices and exits")
-	flag.BoolVar(&ListVoices, "l", false, "lists available voices and exits")
-	flag.StringVar(&Rate, "rate", "+0%", "set tts `RATE`")
-	flag.StringVar(&Volume, "volume", "+0%", "set tts `VOLUME`")
-	// flag.StringVar(&WordsInCue, "words-in-cue", "10", "number of `WORDS` in a subtitle cue")
-	flag.StringVar(&WriteMedia, "write-media", "", "send media output to `FILE` instead of stdout")
-	// flag.StringVar(&WriteSubtitles, "write-subtitles", "", "send subtitle output to provided `FILE` instead of stderr")
-	flag.StringVar(&Proxy, "proxy", "", "use a `PROXY` for tts and voice list")
-	flag.BoolVar(&Fast, "fast", false, "use this flag to run go-playback faster (experimental)")
+	flag.BoolVar(&help, "help", false, "show this help message and exit")
+	flag.BoolVar(&help, "h", false, "show this help message and exit")
+	flag.StringVar(&text, "text", "", "what `TEXT` tts will say")
+	flag.StringVar(&text, "t", "", "what `TEXT` tts will say")
+	flag.StringVar(&file, "file", "", "tts read text from `FILE`")
+	flag.StringVar(&file, "f", "", "tts read text from `FILE`")
+	flag.StringVar(&voice, "voice", "en-US-AriaNeural", "`VOICE` for tts")
+	flag.StringVar(&voice, "v", "en-US-AriaNeural", "`VOICE` for tts")
+	flag.BoolVar(&listVoices, "list-voices", false, "lists available voices and exits")
+	flag.BoolVar(&listVoices, "l", false, "lists available voices and exits")
+	flag.StringVar(&rate, "rate", "+0%", "set tts `RATE`")
+	flag.StringVar(&volume, "volume", "+0%", "set tts `VOLUME`")
+	// flag.StringVar(&wordsInCue, "words-in-cue", "10", "number of `WORDS` in a subtitle cue")
+	flag.StringVar(&writeMedia, "write-media", "", "send media output to `FILE` instead of stdout")
+	// flag.StringVar(&writeSubtitles, "write-subtitles", "", "send subtitle output to provided `FILE` instead of stderr")
+	flag.StringVar(&proxy, "proxy", "", "use a `PROXY` for tts and voice list")
+	flag.BoolVar(&fast, "fast", false, "use this flag to run go-playback faster (experimental)")
 }
 
 func Parse() {
@@ -68,4 +68,35 @@ func NotACommand() {
 func NoExecutableCommand() {
 	fmt.Printf("%s: error: one of the arguments -t/-text, -f/-file, -l/-list-voices is required.\n\n", config.SoftwareName)
 	Usage()
+}
+
+func GetHelp() bool {
+	return help
+}
+func GetText() string {
+	return text
+}
+func GetFile() string {
+	return file
+}
+func GetVoice() string {
+	return voice
+}
+func GetListVoices() bool {
+	return listVoices
+}
+func GetRate() string {
+	return rate
+}
+func GetVolume() string {
+	return volume
+}
+func GetWriteMedia() string {
+	return writeMedia
+}
+func GetProxy() string {
+	return proxy
+}
+func GetFast() bool {
+	return fast
 }

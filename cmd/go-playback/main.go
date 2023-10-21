@@ -15,14 +15,14 @@ func main() {
 	switch {
 	case flags.HasNonFlagArguments():
 		flags.NotACommand()
-	case flags.Help:
+	case flags.GetHelp():
 		flags.Usage()
-	case flags.Text != "":
-		_tts.TTSPlayback(_tts.TEXT, flags.Text, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy, flags.Fast, runMPV)
-	case flags.File != "":
-		_tts.TTSPlayback(_tts.FILE, flags.File, flags.WriteMedia, flags.Voice, flags.Rate, flags.Volume, flags.Proxy, flags.Fast, runMPV)
-	case flags.ListVoices:
-		tts.PrintVoices(flags.Proxy)
+	case flags.GetText() != "":
+		_tts.TTSPlayback(_tts.TEXT, flags.GetText(), flags.GetWriteMedia(), flags.GetVoice(), flags.GetRate(), flags.GetVolume(), flags.GetProxy(), flags.GetFast(), runMPV)
+	case flags.GetFile() != "":
+		_tts.TTSPlayback(_tts.FILE, flags.GetFile(), flags.GetWriteMedia(), flags.GetVoice(), flags.GetRate(), flags.GetVolume(), flags.GetProxy(), flags.GetFast(), runMPV)
+	case flags.GetListVoices():
+		tts.PrintVoices(flags.GetProxy())
 	default:
 		flags.NoExecutableCommand()
 	}
