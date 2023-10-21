@@ -1,6 +1,6 @@
 # go-tts
 
-`go-tts` is a Go module that enables you to utilize Microsoft Edge's online text-to-speech service. It is inspired by [edge-tts](https://github.com/rany2/edge-tts) and forked from [edge-tts-go](https://github.com/rany2/edge-tts).
+`go-tts` is a Go module that enables you to utilize Microsoft Edge's online text-to-speech service. It is inspired by [edge-tts](https://github.com/rany2/edge-tts) and forked from [edge-tts-go](https://github.com/pp-group/edge-tts-go).
 
 ## Installation
 
